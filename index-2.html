@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Home - Brand</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cabin:700&amp;display=swap">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <link rel="stylesheet" href="assets/css/Bootstrap-4---Table-Fixed-Header.css">
+    <link rel="stylesheet" href="assets/css/Bootstrap-DataTables.css">
+    <link rel="stylesheet" href="assets/css/Footer-Dark-Multi-Column-icons.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="assets/css/Team-icons.css">
+    <link rel="stylesheet" href="assets/css/Team-images.css">
+    <link rel="stylesheet" href="assets/css/untitled.css">
+</head>
+
+<body id="page-top" data-bs-spy="scroll" data-bs-target="#mainNav" data-bs-offset="77">
+    <nav class="navbar navbar-expand-md fixed-top navbar-light" id="mainNav">
+        <div class="container"><a class="navbar-brand" href="#"><img src="assets/img/NEXUS.png" width="120" height="106"></a><button data-bs-toggle="collapse" class="navbar-toggler navbar-toggler-right" data-bs-target="#navbarResponsive" type="button" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" value="Menu"><i class="fa fa-bars"></i></button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item nav-link"></li>
+                    <li class="nav-item nav-link"><a class="nav-link" href="index.html">voltar</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <header class="masthead" style="background-image:url('assets/img/intro-bg.jpg');">
+        <div class="intro-body">
+            <section class="position-relative py-4 py-xl-5">
+                <div class="container">
+                    <h2>Log in</h2>
+                    <div class="row d-flex justify-content-center">
+                        <div class="col-md-6 col-xl-4">
+                            <div class="card mb-5">
+                                <div class="card-body d-flex flex-column align-items-center">
+                                    <form id="login-form">
+                                        <input type="text" id="login-username" placeholder="Username">
+                                        <input type="password" id="login-password" placeholder="Password">
+                                        <br><br>
+                                        <input type="submit" value="Login">
+                                      </form>
+                                      
+                                      <script>
+                                      document.getElementById('login-form').addEventListener('submit', function(event) {
+                                        event.preventDefault();
+                                        var username = document.getElementById('login-username').value;
+                                        var password = document.getElementById('login-password').value;
+                                        if (username === localStorage.getItem('username') && password === localStorage.getItem('password')) {
+                                          window.location.href = 'index-3.html';
+                                        } else {
+                                          alert(' username ou password errado');
+                                        }
+                                      });
+                                      </script>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </header>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js"></script>
+    <script src="assets/js/Bootstrap-DataTables-main.js"></script>
+    <script src="assets/js/grayscale.js"></script>
+</body>
+
+</html>
