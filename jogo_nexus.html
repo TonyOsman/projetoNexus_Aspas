@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jogo de Colisão com Pontuação Individual</title>
+<style>
+  /* Estilos para o quadrado */
+  #quadrado {
+    width: 600px;
+    height: 600px;
+    position: relative;
+    border: 1px solid black;
+    background-color: ghostwhite;
+    overflow: hidden;
+    border-radius: 20px;
+  }
+  /* Estilos para os objetos móveis */
+  .objeto {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+  }
+  #objeto1 {
+    background-image: url(robo1.jpg);
+  }
+  #objeto2 {
+    background-image: url(robo2.jpg);
+  }
+  /* Estilos para os contadores de pontuação */
+  .pontuacao {
+    position: absolute;
+    font-size: 24px;
+    color: black;
+  }
+  #pontuacao1 {
+    top: 10px;
+    left: 10px;
+  }
+  #pontuacao2 {
+    top: 10px;
+    right: 10px;
+  }
+  /* Estilos para o canvas */
+  #meuCanvas {
+    position: absolute;
+    z-index: -1;
+  }
+  #pontuacao1{
+    color: red;
+    background-color: white
+  }
+
+  #pontuacao2{
+    color: blue;
+    background-color: white
+  }
+</style>
+</head>
+<body>
+
+<!-- Quadrado para o jogo -->
+<div id="quadrado">
+  <!-- Objetos móveis --> 
+  <div id="objeto1" class="objeto"></div>
+  <div id="objeto2" class="objeto"></div>
+
+  <!-- Contadores de pontuação -->
+  <div id="pontuacao1" class="pontuacao">Pontuação Pedro: <span id="pontuacaoValor1">0</span></div>
+  <div id="pontuacao2" class="pontuacao">Pontuação João: <span id="pontuacaoValor2">0</span></div>
+
+ 
+
+  <!-- Canvas para desenhar a linha de obstáculo -->
+  <canvas id="meuCanvas" width="600" height="600"></canvas>
+</div>
+ <!-- Contadores de vida -->
+ <div id="vida1" class="pontuacao">Vida Pedro: <span id="vidaValor1">100</span></div>
+ <p id="vida2" class="pontuacao">Vida João: <span id="vidaValor2">100</span></p>
+
+<script>
+// Obtém a referência para os objetos móveis
+const objeto1 = document.getElementById("objeto1");
+const objeto2 = document.getElementById("objeto2");
+
+// Posições iniciais dos objetos
+let posX1 = 0;
+let posY1 = 0;
+let posX2 = 300;
+let posY2 = 300;
+
+// Pontuações iniciais dos objetos
+let pontuacao1 = 0;
+let pontuacao2 = 0;
+
+// Vidas iniciais dos objetos
+let vida1 = 100;
+let vida2 = 100;
+
+// Variável para contar o número total de colisões
+let totalColisoes = 0;
+
+// Função para atualizar a posição dos objetos na tela
+function atualizarPosicao() {
+  objeto1.style.left = posX1 + "px";
+  objeto1.style.top = posY1 + "px";
+  objeto2.style.left = posX2 + "px";
+  objeto2.style.top = posY2 + "px";
+}
+
+// Função para mover os objetos com base nas teclas pressionadas
+function moverObjetos(event) {
+  // Obtém o código da tecla pressionada
+  const tecla = event.key;
+
+  // Move o objeto1
+  if (tecla === "a" && posX1 > 0) {
+    posX1 -= 10;
+  } else if (tecla === "d" && posX1 < 550) {
+    posX1 += 10;
+  } else if (tecla === "w" && posY1 > 0) {
+    posY1 -= 10;
+  } else if (tecla === "s" && posY1 < 550) {
+    posY1 += 10;
+  }
+
+  // Move o objeto2
+  if (tecla === "ArrowLeft" && posX2 > 0) {
+    posX2 -= 10;
+  } else if (tecla === "ArrowRight" && posX2 < 550) {
+    posX2 += 10;
+  } else if (tecla === "ArrowUp" && posY2 > 0) {
+    posY2 -= 10;
+  } else if (tecla === "ArrowDown" && posY2 < 550) {
+    posY2 += 10;
+  }
+
+  // Verifica se os objetos se chocaram
+  if (verificarColisao()) {
+    // Incrementa a pontuação de cada objeto
+    if (tecla === "a" || tecla === "d" || tecla === "w" || tecla === "s") {
+      pontuacao1++;
+      document.getElementById("pontuacaoValor1").textContent = pontuacao1;
+    } else {
+      pontuacao2++;
+      document.getElementById("pontuacaoValor2").textContent = pontuacao2;
+    }
+
+    // Desconta um valor aleatório de vida de cada objeto
+    vida1 -= Math.floor(Math.random() * 21);
+    vida2 -= Math.floor(Math.random() * 21);
+    document.getElementById("vidaValor1").textContent = vida1;
+    document.getElementById("vidaValor2").textContent = vida2;
+
+    // Incrementa o total de colisões
+    totalColisoes++;
+
+    // Verifica se o total de colisões atingiu 5
+    if (totalColisoes >= 5) {
+      // Termina o jogo
+      document.removeEventListener("keydown", moverObjetos);
+      let vencedor = vida1 > vida2 ? "Pedro" : "João";
+      alert("O jogo terminou após 5 colisões. O vencedor é " + vencedor + ".");
+      reiniciarJogo();
+    } else {
+      // Reposiciona os objetos em lugares aleatórios
+      reposicionarObjetos();
+    }
+  }
+
+  // Atualiza a posição dos objetos na tela
+  atualizarPosicao();
+}
+
+// Função para verificar se os objetos se chocaram
+function verificarColisao() {
+  const retangulo1 = objeto1.getBoundingClientRect();
+  const retangulo2 = objeto2.getBoundingClientRect();
+  return !(
+    retangulo1.right < retangulo2.left || 
+    retangulo1.left > retangulo2.right || 
+    retangulo1.bottom < retangulo2.top || 
+    retangulo1.top > retangulo2.bottom
+  );
+}
+
+// Função para reposicionar os objetos em lugares aleatórios
+function reposicionarObjetos() {
+  posX1 = Math.floor(Math.random() * 550); // 550 é a largura do quadrado menos a largura do objeto
+  posY1 = Math.floor(Math.random() * 550); // 550 é a altura do quadrado menos a altura do objeto
+  posX2 = Math.floor(Math.random() * 550);
+  posY2 = Math.floor(Math.random() * 550);
+}
+
+// Função para reiniciar o jogo
+function reiniciarJogo() {
+  // Reseta as posições iniciais dos objetos
+  posX1 = 0;
+  posY1 = 0;
+  posX2 = 300;
+  posY2 = 300;
+
+  // Reseta as pontuações dos objetos
+  pontuacao1 = 0;
+  pontuacao2 = 0;
+
+  // Reseta as vidas dos objetos
+  vida1 = 100;
+  vida2 = 100;
+
+  // Reseta o total de colisões
+  totalColisoes = 0;
+
+  // Atualiza a posição dos objetos na tela
+  atualizarPosicao();
+
+  // Atualiza as pontuações na tela
+  document.getElementById("pontuacaoValor1").textContent = pontuacao1;
+  document.getElementById("pontuacaoValor2").textContent = pontuacao2;
+
+  // Atualiza as vidas na tela
+  document.getElementById("vidaValor1").textContent = vida1;
+  document.getElementById("vidaValor2").textContent = vida2;
+
+  // Adiciona novamente o ouvinte de evento para as teclas pressionadas
+  document.addEventListener("keydown", moverObjetos);
+}
+
+// Adiciona um ouvinte de evento para as teclas pressionadas
+document.addEventListener("keydown", moverObjetos);
+
+// Inicializa a posição inicial dos objetos na tela
+atualizarPosicao();
+
+// Inicializa a posição inicial dos objetos na tela
+atualizarPosicao();
+
+// Desenha a linha de obstáculo
+var canvas = document.getElementById('meuCanvas');
+var ctx = canvas.getContext('2d');
+ctx.beginPath();
+ctx.moveTo(30, 400); // ponto inicial da linha
+ctx.lineTo(600, 300); // ponto final da linha
+ctx.strokeStyle = 'black'; // cor da linha
+ctx.lineWidth = 5; // espessura da linha
+ctx.stroke(); // desenha a linha
+</script>
+
+</body>
+</html>
