@@ -161,7 +161,7 @@ function moverObjetos(event) {
     if (totalColisoes >= 5) {
       // Termina o jogo
       document.removeEventListener("keydown", moverObjetos);
-      let vencedor = vida1 > vida2 ? "Pedro" : "João";
+      let vencedor = vida1 > vida2 ? "NEXUS" : "ASPAS";
       alert("O jogo terminou após 5 colisões. O vencedor é " + vencedor + ".");
       reiniciarJogo();
     } else {
